@@ -1,4 +1,4 @@
-import { Application } from "express";
+import { Application, NextFunction, Request, Response } from "express";
 import { CommonRoutesConfig } from "../helper/CommonRoutesConfig";
 
 export class UserRoute extends CommonRoutesConfig {
@@ -8,6 +8,18 @@ export class UserRoute extends CommonRoutesConfig {
     }
 
     configureRoutes(): Application {
+
+        this.app
+            .get('/users');
+        this.app
+            .post('/users');
+        this.app.route('/users/:id')
+            .all((req: Request, res: Response, next: NextFunction) => {
+                next();
+            })
+            .get()
+            .put()
+            .delete()               
         
         return this.app;
     }
