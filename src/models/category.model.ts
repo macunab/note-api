@@ -9,12 +9,19 @@ const categorySchema = new Schema({
     color: {
         type: String,
         required: true
-    },
-    note: {
-        type: Schema.Types.ObjectId,
-        ref: 'Note'
     }
-}, { timestamps: true });
+}, {
+    toJSON: {
+        virtuals: true
+    },
+    timestamps: true
+ });
+
+ categorySchema.virtual('notes', {
+    ref: 'Note',
+    localField:'_id',
+    foreignField: 'category'
+ });
 
 const categoryModel = model<Category & Document>('Category', categorySchema);
 export default categoryModel;
