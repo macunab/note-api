@@ -6,4 +6,5 @@ export interface Note {
     content: string;
     createAt: string;
     user: Types.ObjectId;
+    category: Types.ObjectId;
 }

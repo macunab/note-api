@@ -9,6 +9,10 @@ const categorySchema = new Schema({
     color: {
         type: String,
         required: true
+    },
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
     }
 }, {
     toJSON: {
