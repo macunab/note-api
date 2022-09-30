@@ -8,7 +8,7 @@ export class NoteRoute extends CommonRoutesConfig {
     }
 
     configureRoutes(): Application {
-        
+
         this.app.route('/notes')
             .get();
         this.app.route('/notes')
@@ -19,7 +19,7 @@ export class NoteRoute extends CommonRoutesConfig {
             })
             .get()
             .put()
-            .delete();       
+            .delete();
         return this.app;
     }
 }

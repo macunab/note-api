@@ -1,4 +1,4 @@
-import { Application, Request, Response, NextFunction } from "express";
+import { Application, NextFunction } from "express";
 import { check } from "express-validator";
 import categoryController from "../controllers/category.controller";
 import { CommonRoutesConfig } from "../helper/CommonRoutesConfig";
@@ -10,17 +10,17 @@ export class CategoryRoute extends CommonRoutesConfig {
     }
 
     configureRoutes(): Application {
-        this.app.route('/categorys')
-            .get(categoryController.findCategorysByUser);
+        this.app.route('/categories')
+            .get(categoryController.findCategoriesByUser);
 
-        this.app.route('/categorys')
+        this.app.route('/categories')
             .post( 
                 check('name', 'the name is required').not().isEmpty(),
                 check('color', 'the color is required').not().isEmpty(),
                 validationFields.verifyFieldsErrors,
                 categoryController.createCategory);
 
-        this.app.route('/categorys/:id')
+        this.app.route('/categories/:id')
             .all((next: NextFunction) => {
                 next();
             })

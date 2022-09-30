@@ -4,7 +4,7 @@ import categoryModel from "../models/category.model";
 
 class CategoryController {
 
-    async findCategorysByUser(req: Request, res: Response) {
+    async findCategoriesByUser(req: Request, res: Response) {
         const user = req.user;
         console.log(req.user);
         if(!user) {
@@ -45,6 +45,14 @@ class CategoryController {
                 msg: `An error ocurred while trying persist a new category, error: ${ err }`
             })
         }
+    }
+
+    async deleteCategory(req: Request, res: Response) {
+
+    }
+
+    async updateCategory(req: Request, res: Response) {
+        
     }
 }
 
