@@ -4,7 +4,7 @@ if (dotenvResult.error) {
     throw dotenvResult.error;
 }
 import dbInit from './db/dbInit';
-import express, { Application, Response } from 'express';
+import express, { Application, Request, Response } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import passport from 'passport';
@@ -30,6 +30,12 @@ app.use(express.json());
 routes.push(new NoteRoute(app));
 routes.push(new UserRoute(app));
 routes.push(new CategoryRoute(app));
+app.use('*', (req: Request, res: Response) => {
+    res.status(400).json({
+        ok: false,
+        msg: 'Ohh you are lost, read the API documentation to find your way back home'
+    });
+})
 
 app.listen(PORT, () => {
     console.log(`Server run on port ${PORT}`)

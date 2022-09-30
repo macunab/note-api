@@ -48,11 +48,36 @@ class CategoryController {
     }
 
     async deleteCategory(req: Request, res: Response) {
-
+        const { id } = req.params;
+        try {
+            await categoryModel.deleteOne({ _id: id });
+            res.status(200).json({
+                ok: true,
+                msg: 'the category was delete successfully'
+            });
+        } catch(err) {
+            res.status(400).json({
+                ok: false,
+                msg: 'An error ocurred while trying delete a document'
+            });
+        }
     }
 
     async updateCategory(req: Request, res: Response) {
-        
+        const category: Category = req.body;
+        const { id } = req.params;
+        try {
+            await categoryModel.findByIdAndUpdate( id, category );
+            res.status(200).json({
+                ok: true,
+                msg: 'The category was updated successfully'
+            });
+        } catch(err) {
+            res.status(400).json({
+                ok: false,
+                msg: `An error ocurred while trying update a document, error: ${ err }`
+            })
+        }
     }
 }
 

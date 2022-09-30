@@ -1,5 +1,6 @@
 import { Application, NextFunction } from "express";
 import { check } from "express-validator";
+import passport from "passport";
 import categoryController from "../controllers/category.controller";
 import { CommonRoutesConfig } from "../helper/CommonRoutesConfig";
 import validationFields from "../middlewares/validationFields";
@@ -11,7 +12,8 @@ export class CategoryRoute extends CommonRoutesConfig {
 
     configureRoutes(): Application {
         this.app.route('/categories')
-            .get(categoryController.findCategoriesByUser);
+            .get( passport.authenticate('jwt', { session: false }),
+                categoryController.findCategoriesByUser);
 
         this.app.route('/categories')
             .post( 
