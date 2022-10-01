@@ -11,7 +11,6 @@ class JwtStrategy {
             jwtFromRequest: extractJWT.fromHeader('x-token')
         }, (token, done) => {
             try {
-                console.log(token.user);
                 return done(null, token);
             } catch(error) {
                 done(error);

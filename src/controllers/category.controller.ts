@@ -1,18 +1,13 @@
 import { Request, Response } from "express";
 import { Category } from "../interfaces/category.interface";
+import { User } from "../interfaces/user.interface";
 import categoryModel from "../models/category.model";
 
 class CategoryController {
 
     async findCategoriesByUser(req: Request, res: Response) {
-        const user = req.user;
-        console.log(req.user);
-        if(!user) {
-            return res.status(400).json({
-                ok: false,
-                msg: 'user not authenticated'
-            })
-        }
+        const user: User = req.user?.user;
+        console.log(user);
         try {
             const categorys = await categoryModel.find({ user: user});
             res.status(200).json({
