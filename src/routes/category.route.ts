@@ -16,7 +16,8 @@ export class CategoryRoute extends CommonRoutesConfig {
                 categoryController.findCategoriesByUser);
 
         this.app.route('/categories')
-            .post( 
+            .post(
+                passport.authenticate('jwt', { session: false }),
                 check('name', 'the name is required').not().isEmpty(),
                 check('color', 'the color is required').not().isEmpty(),
                 validationFields.verifyFieldsErrors,
@@ -27,8 +28,17 @@ export class CategoryRoute extends CommonRoutesConfig {
                 next();
             })
             .get()
-            .put()
-            .delete();
+            .put(
+                passport.authenticate('jwt', { session: false }),
+                check('name', 'the name is required').not().isEmpty(),
+                check('color', 'the color ir required').not().isEmpty(),
+                validationFields.verifyFieldsErrors,
+                categoryController.updateCategory
+            )
+            .delete(
+                passport.authenticate('jwt', { session: false }),
+                categoryController.deleteCategory
+            );
         
         return this.app;
     }

@@ -61,6 +61,10 @@ class UserController {
                 })
             })
     }
+
+    async registerUserWithCredentials(req: Request, res: Response) {
+        
+    }
 }
 
 export default new UserController();
