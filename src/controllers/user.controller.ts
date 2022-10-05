@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import jwt from 'jsonwebtoken';
 import userModel from "../models/user.model";
 import bcrypt from 'bcryptjs';
+import { User } from "../interfaces/user.interface";
 
 class UserController {
 
@@ -63,7 +64,12 @@ class UserController {
     }
 
     async registerUserWithCredentials(req: Request, res: Response) {
-        
+        const user: User = req.body;
+        try {
+
+        } catch(err) {
+            
+        }
     }
 }
 

@@ -41,11 +41,37 @@ class NoteController {
     }
 
     async updateNote(req: Request, res: Response) {
+        const { id } = req.params;
+        const note: Note = req.body;
+        try {
+            await noteModel.findByIdAndUpdate(id, note);
+            res.status(200).json({
+                ok: true,
+                msg: 'The documents was updated successfully'
+            })
 
+        } catch(err) {
+            res.status(400).json({
+                ok: false,
+                msg: `An error ocurred while trying update a note, error: ${ err }`
+            })
+        }
     }
 
     async deleteNote(req: Request, res: Response) {
-
+        const { id } = req.params;
+        try {
+            await noteModel.deleteOne({ _id: id });
+            res.status(200).json({
+                ok: true,
+                msg: `The note ${id} was successfully remove from db`
+            })
+        } catch(err) {
+            res.status(400).json({
+                ok: false,
+                msg: `An error ocurred while tryng delete a note, error: ${ err }`
+            })
+        }
     }
 }
 

@@ -30,8 +30,14 @@ export class NoteRoute extends CommonRoutesConfig {
                 next();
             })
             .get()
-            .put()
-            .delete();
+            .put(
+                passport.authenticate('jwt', { session: false }),
+                noteController.updateNote
+            )
+            .delete(
+                passport.authenticate('jwt', { session: false }),
+                noteController.deleteNote
+            );
         return this.app;
     }
 }
