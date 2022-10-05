@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import userModel from "../models/user.model";
 import bcrypt from 'bcryptjs';
 import { User } from "../interfaces/user.interface";
+import jwtHelper from "../helper/jwtHelper";
 
 class UserController {
 
@@ -63,12 +64,38 @@ class UserController {
             })
     }
 
+    /*
+        1) comprobar si el email no esta registrado.
+        2) encriptar el password.
+        3) guardar el usuario en la db.
+        4) generar el token.
+        5) retornar el token.
+    */
     async registerUserWithCredentials(req: Request, res: Response) {
-        const user: User = req.body;
+        const { email, password } = req.body;
         try {
-
+            const userDb = await userModel.findOne({ email });
+            if(userDb) {
+                return res.status(400).json({
+                    ok: false,
+                    msg: 'the email already exists'
+                })
+            }
+            const user = new userModel(req.body);
+            const salt = bcrypt.genSaltSync();
+            user.password = bcrypt.hashSync(password, salt);
+            const token = jwtHelper.jwtSign(user);
+            await user.save();
+            res.status(200).json({
+                ok: true,
+                token,
+                msg: 'User register successfully'
+            })
         } catch(err) {
-            
+            res.status(400).json({
+                ok: false,
+                msg: `An error ocurred while trying to register a user, error: ${ err }`
+            })
         }
     }
 }

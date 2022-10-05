@@ -3,8 +3,6 @@ import { check } from 'express-validator';
 import passport from 'passport';
 import noteController from '../controllers/note.controller';
 import { CommonRoutesConfig } from "../helper/CommonRoutesConfig";
-import userAuthentication from '../middlewares/userAuthentication';
-
 
 export class NoteRoute extends CommonRoutesConfig {
     constructor(app: Application) {
@@ -15,12 +13,11 @@ export class NoteRoute extends CommonRoutesConfig {
         this.app.route('/notes')
             .get(
                 passport.authenticate('jwt', { session: false }),
-                userAuthentication.isAuthenticated,
                 noteController.findNotesByUser
             );
         this.app.route('/notes')
             .post(
-                userAuthentication.isAuthenticated,
+                passport.authenticate('jwt', { session: false }),
                 check('title', 'the title is required').not().isEmpty(),
                 check('content', 'the content is required').not().isEmpty(),
                 noteController.createNote
