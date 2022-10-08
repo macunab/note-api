@@ -1,4 +1,4 @@
-import { Application, NextFunction } from "express";
+import { Application, NextFunction, Request, Response } from "express";
 import { check } from "express-validator";
 import passport from "passport";
 import categoryController from "../controllers/category.controller";
@@ -24,7 +24,7 @@ export class CategoryRoute extends CommonRoutesConfig {
                 categoryController.createCategory);
 
         this.app.route('/categories/:id')
-            .all((next: NextFunction) => {
+            .all((req: Request, res: Response, next: NextFunction) => {
                 next();
             })
             .get()

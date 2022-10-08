@@ -22,8 +22,6 @@ class UserController {
                     msg: `An error ocurred while trying generated a jwt, error: ${ err }`
                 })
             }
-
-            
         }
     }
 

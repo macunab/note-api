@@ -8,7 +8,7 @@ class NoteController {
     async findNotesByUser(req: Request, res: Response) {
         const user: User = req.user!.user;
         try {
-            const notes = noteModel.find({ user: user });
+            const notes = await noteModel.find({ user: user }).populate('category', 'name color');
             res.status(200).json({
                 ok: true,
                 msg: 'All documents found successfully',
