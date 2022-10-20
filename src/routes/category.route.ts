@@ -12,7 +12,8 @@ export class CategoryRoute extends CommonRoutesConfig {
 
     configureRoutes(): Application {
         this.app.route('/categories')
-            .get( passport.authenticate('jwt', { session: false }),
+            .get( 
+                //passport.authenticate('jwt', { session: false }),
                 categoryController.findCategoriesByUser);
 
         this.app.route('/categories')

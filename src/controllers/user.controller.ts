@@ -83,6 +83,28 @@ class UserController {
             })
         }
     }
+
+    async verifyEmail(req: Request, res: Response) {
+        const { email } = req.body;
+        try {
+            const userDb = await userModel.findOne({ email: email});
+            if(userDb) {
+                return res.status(200).json({
+                    ok: false,
+                    msg: 'the email already exist'
+                });
+            }
+            res.status(200).json({
+                ok: true,
+                msg: 'the email not exist in the db'
+            });
+        } catch(err) {
+            res.status(400).json({
+                ok: false,
+                msg: `An error ocurred while trying verify a email, error: ${err}`
+            })
+        }
+    }
 }
 
 export default new UserController();

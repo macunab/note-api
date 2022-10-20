@@ -13,34 +13,40 @@ export class UserRoute extends CommonRoutesConfig {
     configureRoutes(): Application {
 
         this.app.route('/auth/google')
-            .get(passport.authenticate('sign-in-google', { scope: ['profile', 'email']}));
+            .get(passport.authenticate('sign-in-google', { scope: ['profile', 'email'] }));
         this.app.route('/auth/google/callback')
             .get(passport.authenticate('sign-in-google', { session: false }),
                 userController.createJwt);
-                
+
         this.app.route('/auth/login')
             .post(
                 check('email', 'Must be a valid email').isEmail(),
                 check('password', 'The password is required').not().isEmpty(),
                 userController.authenticationWhitCredentials
-            )        
+            );
+
+        this.app.route('/auth/email-verify')
+            .post(
+                check('email', 'the email is required').not().isEmpty(),
+                userController.verifyEmail
+            );
 
         this.app
             .get('/users');
         this.app
             .post('/users',
-            check('name', 'The name is required').not().isEmpty(),
-            check('email', 'Must be a valid email').isEmail(),
-            check('password', 'The password is required').not().isEmpty(),
-            userController.registerUserWithCredentials);
+                check('name', 'The name is required').not().isEmpty(),
+                check('email', 'Must be a valid email').isEmail(),
+                check('password', 'The password is required').not().isEmpty(),
+                userController.registerUserWithCredentials);
         this.app.route('/users/:id')
             .all((req: Request, res: Response, next: NextFunction) => {
                 next();
             })
             .get()
             .put()
-            .delete()               
-        
+            .delete()
+
         return this.app;
     }
 }

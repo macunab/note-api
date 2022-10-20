@@ -2,13 +2,15 @@ import { Request, Response } from "express";
 import { Category } from "../interfaces/category.interface";
 import { User } from "../interfaces/user.interface";
 import categoryModel from "../models/category.model";
+import userModel from '../models/user.model';
 
 class CategoryController {
 
     async findCategoriesByUser(req: Request, res: Response) {
-        const user: User = req.user?.user;
-        console.log(user);
+       // const user: User = req.user?.user;
+        //console.log(user);
         try {
+            const user = await userModel.findById('63373c93c885cbc4e10fae07');
             const categorys = await categoryModel.find({ user: user});
             res.status(200).json({
                 ok: true,
