@@ -6,3 +6,7 @@ export interface User {
     googleId?: string;
     password?: string;
 }
+
+export interface Payload {
+    user: User;
+}

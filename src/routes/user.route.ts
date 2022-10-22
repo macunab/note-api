@@ -31,6 +31,9 @@ export class UserRoute extends CommonRoutesConfig {
                 userController.verifyEmail
             );
 
+        this.app.route('/auth/verify')
+                .get(userController.verifyToken);
+
         this.app
             .get('/users');
         this.app

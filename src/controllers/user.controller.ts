@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import userModel from "../models/user.model";
 import bcrypt from 'bcryptjs';
 import jwtHelper from "../helper/jwtHelper";
+import jwt from 'jsonwebtoken';
+import { Payload } from "../interfaces/user.interface";
 
 class UserController {
 
@@ -105,6 +107,33 @@ class UserController {
                 msg: `An error ocurred while trying verify a email, error: ${err}`
             })
         }
+    }
+
+    async verifyToken(req: Request, res: Response) {
+        const headerToken = req.header('x-token');
+        if( !headerToken ) {
+            return res.status(401).json({
+                ok: false,
+                msg: 'invalid token'
+            })
+        }
+        try {
+            const { user } = jwt.verify(headerToken, (process.env.JWT_SECRET as string)) as Payload;
+            console.log(user);
+            const token = await jwtHelper.jwtSign(user);
+            res.status(200).json({
+                ok: true,
+                token,
+                data: user,
+                msg: 'the token is valid and was refreshed'
+            })
+        } catch(err) {
+            res.status(401).json({
+                ok: false,
+                msg: 'the token expired'
+            })
+        }
+       
     }
 }
 
