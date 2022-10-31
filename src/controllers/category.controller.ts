@@ -7,10 +7,9 @@ import userModel from '../models/user.model';
 class CategoryController {
 
     async findCategoriesByUser(req: Request, res: Response) {
-       // const user: User = req.user?.user;
-        //console.log(user);
+        const requestUser: User = req.user?.user;
         try {
-            const user = await userModel.findById('63373c93c885cbc4e10fae07');
+            const user = await userModel.findById(requestUser._id);
             const categorys = await categoryModel.find({ user: user});
             res.status(200).json({
                 ok: true,
@@ -30,9 +29,11 @@ class CategoryController {
         category.user = req.user!.user;
         try{
           const categoryQuery = new categoryModel(category);
+          //console.log(`LA CATEGORIA CREADA ES: ${ categoryQuery }`);
           await categoryQuery.save();
           res.status(200).json({
             ok: true,
+            data: categoryQuery,
             msg: 'Category create successfully'
           })
 
@@ -73,6 +74,32 @@ class CategoryController {
             res.status(400).json({
                 ok: false,
                 msg: `An error ocurred while trying update a document, error: ${ err }`
+            })
+        }
+    }
+
+    async verifyName(req: Request, res: Response) {
+        const { name } = req.body;
+        const requestUser: User = req.user!.user;
+        try {
+            const user = await userModel.findById(requestUser._id);
+            const category = await categoryModel.findOne({ name: name, user: user});
+            //console.log(category);
+            if(category) {
+                return res.status(400).json({
+                    ok: false,
+                    msg: 'the category was found'
+                })
+            } else {
+                res.status(200).json({
+                    ok: true,
+                    msg: 'the category wasnt found'
+                })
+            }
+        } catch(err) {
+            res.status(400).json({
+                ok: false,
+                msg: 'An error ocurred while trying verify the category name'
             })
         }
     }
