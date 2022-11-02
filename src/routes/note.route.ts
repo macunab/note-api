@@ -22,6 +22,11 @@ export class NoteRoute extends CommonRoutesConfig {
                 check('content', 'the content is required').not().isEmpty(),
                 noteController.createNote
             );
+        this.app.route('/notes/:id/:fav')
+                .get(
+                    passport.authenticate('jwt', { session: false }),
+                    noteController.updateFav
+                );
         this.app.route('/notes/:id')
             .all((req: Request, res: Response, next: NextFunction) => {
                 next();

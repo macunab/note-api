@@ -7,4 +7,5 @@ export interface Note {
     createAt: string;
     user: Types.ObjectId;
     category?: Types.ObjectId;
+    fav: boolean;
 }

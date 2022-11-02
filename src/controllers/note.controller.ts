@@ -73,6 +73,22 @@ class NoteController {
             })
         }
     }
+
+    async updateFav( req: Request, res: Response ) {
+        const {id, fav} = req.params;
+        try {
+            await noteModel.findByIdAndUpdate(id, { fav: fav});
+            res.status(200).json({
+                ok: true,
+                msg: 'The note fav param was updated'
+            });
+        } catch(err) {
+            res.status(400).json({
+                ok: false,
+                msg: 'An error occurred while trying update a note'
+            })
+        }
+    }
 }
 
 export default new NoteController();

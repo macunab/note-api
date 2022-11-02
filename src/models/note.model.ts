@@ -18,6 +18,10 @@ const noteSchema = new Schema({
     category: {
         type: Schema.Types.ObjectId,
         ref: 'Category'
+    },
+    fav: {
+        type: Boolean,
+        default: false
     }
 }, { timestamps: true });
 
