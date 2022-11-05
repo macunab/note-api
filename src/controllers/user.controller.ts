@@ -3,7 +3,7 @@ import userModel from "../models/user.model";
 import bcrypt from 'bcryptjs';
 import jwtHelper from "../helper/jwtHelper";
 import jwt from 'jsonwebtoken';
-import { Payload } from "../interfaces/user.interface";
+import { Payload, User } from "../interfaces/user.interface";
 
 class UserController {
 
@@ -87,6 +87,23 @@ class UserController {
         }
     }
 
+    async updatePassword(req: Request, res: Response) {
+        const user: User = req.user?.user;
+        const { password } = req.body;
+        try {
+            await userModel.findByIdAndUpdate(user._id, { password: password });
+            res.status(200).json({
+                ok: true,
+                msg: 'The user was updated successfully'
+            });
+        } catch(err) {
+            res.status(400).json({
+                ok: false,
+                msg: 'An error ocurred while trying update a password'
+            })
+        } 
+    }
+
     async verifyEmail(req: Request, res: Response) {
         const { email } = req.body;
         try {
@@ -134,6 +151,29 @@ class UserController {
             })
         }
        
+    }
+
+    async verifyPassword(req: Request, res: Response) {
+        const { password } = req.body;
+        const user: User = req.user?.user;
+        try {
+            const isPasswordValid = bcrypt.compareSync(password, user.password!);
+            if(!isPasswordValid){
+                return res.status(400).json({
+                    ok: false,
+                    msg: 'The password does not match'
+                }); 
+            }
+            res.status(200).json({
+                ok: true,
+                msg: 'The password match'
+            });
+        } catch(err) {
+            res.status(400).json({
+                ok: false,
+                msg: `An error ocurred while trying verify password, error: ${ err}`
+            });
+        }
     }
 }
 

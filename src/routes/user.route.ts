@@ -31,11 +31,16 @@ export class UserRoute extends CommonRoutesConfig {
                 userController.verifyEmail
             );
 
+        this.app.route('/auth/password-verify')
+            .post(
+                passport.authenticate('jwt', { session: false }),
+                check('password', 'The password is required').not().isEmpty(),
+                userController.verifyPassword
+            )        
+
         this.app.route('/auth/verify')
                 .get(userController.verifyToken);
 
-        this.app
-            .get('/users');
         this.app
             .post('/users',
                 check('name', 'The name is required').not().isEmpty(),
@@ -47,7 +52,10 @@ export class UserRoute extends CommonRoutesConfig {
                 next();
             })
             .get()
-            .put()
+            .put(
+                passport.authenticate('jwt', {session: false}),
+                check('password', 'The password is required').not().isEmpty(),
+                userController.updatePassword)
             .delete()
 
         return this.app;
