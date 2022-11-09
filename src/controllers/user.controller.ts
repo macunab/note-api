@@ -90,8 +90,11 @@ class UserController {
     async updatePassword(req: Request, res: Response) {
         const user: User = req.user?.user;
         const { password } = req.body;
+        const salt = bcrypt.genSaltSync();
+        
         try {
-            await userModel.findByIdAndUpdate(user._id, { password: password });
+            const passwordEncrypt = bcrypt.hashSync(password, salt);
+            await userModel.findByIdAndUpdate(user._id, { password: passwordEncrypt });
             res.status(200).json({
                 ok: true,
                 msg: 'The user was updated successfully'
@@ -157,9 +160,12 @@ class UserController {
         const { password } = req.body;
         const user: User = req.user?.user;
         try {
-            const isPasswordValid = bcrypt.compareSync(password, user.password!);
+            const dbUser = await userModel.findOne({email: user.email});
+            const isPasswordValid = bcrypt.compareSync(password, dbUser?.password!);
+            console.log(`ES VALIDO EL PASSWORD: ${isPasswordValid}` )
+            console.log(`EL PASSWORD ES: ${ dbUser?.password! }`);
             if(!isPasswordValid){
-                return res.status(400).json({
+                return res.status(200).json({
                     ok: false,
                     msg: 'The password does not match'
                 }); 

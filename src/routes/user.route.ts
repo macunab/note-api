@@ -36,10 +36,10 @@ export class UserRoute extends CommonRoutesConfig {
                 passport.authenticate('jwt', { session: false }),
                 check('password', 'The password is required').not().isEmpty(),
                 userController.verifyPassword
-            )        
+            )
 
         this.app.route('/auth/verify')
-                .get(userController.verifyToken);
+            .get(userController.verifyToken);
 
         this.app
             .post('/users',
@@ -47,16 +47,13 @@ export class UserRoute extends CommonRoutesConfig {
                 check('email', 'Must be a valid email').isEmail(),
                 check('password', 'The password is required').not().isEmpty(),
                 userController.registerUserWithCredentials);
-        this.app.route('/users/:id')
-            .all((req: Request, res: Response, next: NextFunction) => {
-                next();
-            })
-            .get()
+
+        this.app.route('/users/update-psw')
             .put(
-                passport.authenticate('jwt', {session: false}),
+                passport.authenticate('jwt', { session: false }),
                 check('password', 'The password is required').not().isEmpty(),
-                userController.updatePassword)
-            .delete()
+                userController.updatePassword
+            );
 
         return this.app;
     }

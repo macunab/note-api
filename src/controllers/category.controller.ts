@@ -86,7 +86,7 @@ class CategoryController {
             const category = await categoryModel.findOne({ name: name, user: user});
             //console.log(category);
             if(category) {
-                return res.status(400).json({
+                return res.status(200).json({
                     ok: false,
                     msg: 'the category was found'
                 })
